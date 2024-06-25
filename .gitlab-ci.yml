@@ -1,0 +1,52 @@
+stages:   
+  - build
+  - test
+  - deploy
+
+build_image:
+  stage: build
+  tags: 
+    - ubuntu-stc-03
+  before_script:
+    - docker login -u -p 
+  script:
+    - docker build . --file Dockerfile --tag ros2-colcon:v1
+
+test_job:
+  stage: test
+  tags:
+    - ubuntu-stc-03
+  needs:
+    - build_image
+  image: ros2-colcon:v1
+  script:
+    - colcon test
+
+push_image:
+  stage: build
+  tags:
+    - ubuntu-stc-03
+  needs:
+    - test_job
+  script:
+    - docker tag ros2-colcon:v1 hoainamtran204/ros2-colcon:v1
+    - docker push hoainamtran204/ros2-colcon:v1
+
+deploy_job:
+  stage: deploy
+  tags: 
+    - ubuntu-stc-03
+  needs:
+    - push_image
+  script:
+    - docker run -it --name=ros2-colcon hoainamtran204/ro2-colcon:v1 /bin/bash
+
+# run_job:
+#   stage: deploy
+#   tags: 
+#     - ubuntu-stc-03
+#   needs:
+#     - deploy_job
+#   script:
+#     - docker exec -d ros2-colcon bash -c 'source /opt/ros/humble/setup.bash;ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function'
+#     - docker exec -d ros2-colcon bash -c 'source /opt/ros/humble/setup.bash;ros2 run examples_rclcpp_minimal_publisher publisher_member_function'
