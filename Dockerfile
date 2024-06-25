@@ -4,6 +4,7 @@ RUN apt update && apt install locales -y
 RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 ENV LANG=en_US.UTF-8
+ENV TZ=Asia/Tokyo
 
 RUN apt install software-properties-common -y
 RUN add-apt-repository universe
