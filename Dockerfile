@@ -1,5 +1,9 @@
 FROM ubuntu:22.04
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN apt-get update \
+ && apt-get install -y git tzdata
+ 
 RUN apt update && apt install locales -y
 RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
