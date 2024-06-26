@@ -1,9 +1,10 @@
 FROM ubuntu:22.04
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
 RUN apt-get update \
  && apt-get install -y git tzdata
- 
+
 RUN apt update && apt install locales -y
 RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
@@ -21,7 +22,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 RUN apt update
 RUN apt upgrade
 
-RUN apt install ros-humble-ros-base -y
+RUN apt install ros-humble-desktop -y
 RUN apt install ros-dev-tools -y
 
 RUN mkdir -p /ros2_ws
@@ -30,8 +31,8 @@ COPY ./src /ros2_ws/src
 
 WORKDIR /ros2_ws
 
-RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash"] .
+SHELL ["/bin/bash", "-c"]
 
-RUN colcon build --symlink-install
+RUN source /opt/ros/humble/setup.bash && colcon build --symlink-install
 
 CMD ["/bin/bash"]

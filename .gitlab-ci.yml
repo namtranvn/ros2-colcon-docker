@@ -1,12 +1,13 @@
 stages:   
   - build
   - test
+  - push
   - deploy
 
 build_image:
   stage: build
   tags: 
-    - ubuntu-stc-03
+    - stc-ubuntu-03
   before_script:
     - docker login -u -p 
   script:
@@ -15,9 +16,7 @@ build_image:
 test_job:
   stage: test
   tags:
-    - ubuntu-stc-03
-  needs:
-    - build_image
+    - stc-ubuntu-03
   image: ros2-colcon:v1
   script:
     - colcon test
@@ -25,9 +24,7 @@ test_job:
 push_image:
   stage: build
   tags:
-    - ubuntu-stc-03
-  needs:
-    - test_job
+    - stc-ubuntu-03
   script:
     - docker tag ros2-colcon:v1 hoainamtran204/ros2-colcon:v1
     - docker push hoainamtran204/ros2-colcon:v1
@@ -35,11 +32,11 @@ push_image:
 deploy_job:
   stage: deploy
   tags: 
-    - ubuntu-stc-03
+    - stc-ubuntu-03
   needs:
     - push_image
   script:
-    - docker run -it --name=ros2-colcon hoainamtran204/ro2-colcon:v1 /bin/bash
+    - docker run -it --name=ros2-colcon hoainamtran204/ros2-colcon:v1 /bin/bash
 
 # run_job:
 #   stage: deploy

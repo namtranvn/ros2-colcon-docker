@@ -13,6 +13,7 @@ git push -u origin main
 colcon build --symlink-install
 colcon test
 source /opt/ros/humble/setup.bash
+source install/setup.bash
 ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function
 ros2 run examples_rclcpp_minimal_publisher publisher_member_function
 ```
