@@ -36,7 +36,7 @@ deploy_job:
   needs:
     - push_image
   script:
-    - docker run -it --name=ros2-colcon hoainamtran204/ros2-colcon:v1 /bin/bash
+    - docker run -i --name=ros2-colcon hoainamtran204/ros2-colcon:v1 /bin/bash -c "sleep forever"
 
 # run_job:
 #   stage: deploy
